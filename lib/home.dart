@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)
                      ),),
                      child: CachedNetworkImage(
-                         imageUrl: product?.image ?? '',
+                         imageUrl: product?.image ?? "",
                        fit: BoxFit.cover,
                        placeholder: (context, url) => const SizedBox(
                          height: 30,
