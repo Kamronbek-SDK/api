@@ -1,4 +1,4 @@
-class Class {
+class Product {
   int? id;
   String? title;
   double? price;
@@ -7,7 +7,7 @@ class Class {
   String? image;
   Rating? rating;
 
-  Class(
+  Product(
       {this.id,
         this.title,
         this.price,
@@ -16,7 +16,7 @@ class Class {
         this.image,
         this.rating});
 
-  Class.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     price = json['price'];
