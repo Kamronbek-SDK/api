@@ -24,38 +24,48 @@ class _HomeState extends State<Home> {
       ),
        body: FutureBuilder(
            future: _repository.getProducts(),
-           builder: (context, snapshot) => ListView.separated(
-             itemCount: snapshot.data?.length ?? 0,
-             separatorBuilder: (context, index) => const Divider(),
-             itemBuilder: (context, index) {
-               final product = snapshot.data?[index];
-               return Card(
-                 surfaceTintColor: Colors.white,
-                 shape: RoundedRectangleBorder(
-                     borderRadius: BorderRadius.circular(12)
-                 ),
-                 child: ListTile(
-                   leading: Container(
-                     decoration: const BoxDecoration(
-                       borderRadius: BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)
-                     ),),
-                     child: CachedNetworkImage(
-                         imageUrl: product?.image ?? "",
-                       fit: BoxFit.cover,
-                       placeholder: (context, url) => const SizedBox(
-                         height: 30,
-                         child: CupertinoActivityIndicator(),
+           builder: (context, snapshot) {
+             if (snapshot.connectionState == ConnectionState.waiting) {
+               return const Center(child: CircularProgressIndicator());
+             } else if (snapshot.hasError) {
+               return Center(child: Text('Error: ${snapshot.error}'));
+             } else if (snapshot.hasData) {
+               return ListView.separated(
+                   itemCount: snapshot.data?.length ?? 0,
+                   separatorBuilder: (context, index) => const Divider(),
+                   itemBuilder: (context, index) {
+                     final product = snapshot.data?[index];
+                     return Card(
+                       surfaceTintColor: Colors.white,
+                       shape: RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(12)
                        ),
-                       errorWidget: (context, url, error) => const Icon(Icons.error),
-                     ),
-                   ),
-                   title: Text(product?.title ?? ''),
-                   subtitle: Text(product?.category ?? ''),
-                   trailing: Text('${product?.price}\$', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                 ),
+                       child: ListTile(
+                         leading: Container(
+                           decoration: const BoxDecoration(
+                             borderRadius: BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)
+                             ),),
+                           child: CachedNetworkImage(
+                             imageUrl: product?.image ?? "",
+                             fit: BoxFit.cover,
+                             placeholder: (context, url) => const SizedBox(
+                               height: 30,
+                               child: CupertinoActivityIndicator(),
+                             ),
+                             errorWidget: (context, url, error) => const Icon(Icons.error),
+                           ),
+                         ),
+                         title: Text(product?.title ?? ''),
+                         subtitle: Text(product?.category ?? ''),
+                         trailing: Text('${product?.price}\$', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                       ),
+                     );
+                   }
                );
+             } else {
+               return const Center(child: Text('No products available.'));
              }
-           )
+           }
        )
     );
   }
